@@ -155,18 +155,32 @@
                 display: flex;
                 flex-flow: column;
                 justify-content: center;
-                flex-direction: row;
+                flex-direction: column;
             }
 
             .screen {
                 margin: 20px;
-                margin-top: 103px;
             }
 
             .manual {
                 margin: 20px;
-                width: 30%;
+                margin-top: 0;
             }
+
+            @media (min-width:1025px) {
+                .screen {
+                    margin-top: 83px;
+                }
+
+                .main-area-container {
+                    flex-direction: row;
+                }
+
+                .manual {
+                    width: 30%;
+                }
+            }
+
         </style>
     </head>
 
