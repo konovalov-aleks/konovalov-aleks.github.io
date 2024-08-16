@@ -143,6 +143,24 @@
                 border-radius: 4px;
             }
 
+            .hide_text {
+                padding-top: 50px;
+            }
+
+            #statusbar {
+                transition-property: padding-top;
+                transition-duration: 1s;
+                transition-timing-function: linear;
+            }
+
+            .toolbar_message {
+                color: white;
+                flex-grow: 100;
+                font: 0.8rem "Verdana";
+                height: 15px;
+                overflow: hidden;
+            }
+
             .toolbar_button:hover {
                 color: #ffc0c0;
                 box-shadow: 1px 1px 3px black;
@@ -187,6 +205,24 @@
             canvas.dispatchEvent(upEvent);
         }
 
+        function hideMessage() {
+            var msg_bar = document.getElementById("statusbar");
+            if (msg_bar.timeout !== undefined)
+                clearTimeout(msg_bar.timeout);
+            msg_bar.classList.add('hide_text');
+            msg_bar.timeout = undefined;
+        }
+
+        function showMessage(msg) {
+            hideMessage();
+            var msg_bar = document.getElementById("statusbar");
+            msg_bar.classList.remove('hide_text');
+            msg_bar.innerText = msg;
+            msg_bar.timeout = setTimeout(() => {
+                hideMessage();
+            }, 5000);
+        }
+
         async function run_game() {
             var m = await createModule();
 
@@ -208,6 +244,8 @@
             document.getElementById('game_ui').classList.remove('hidden');
             document.getElementById('placeholder').classList.add('hidden');
             m.callMain(['--windowed'])
+
+            showMessage('Click mouse or press any key to skip the intro');
         }
     </script>
 
@@ -225,6 +263,7 @@
                     <div id="game_ui" class="hidden">
                         <canvas class="emscripten" id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas>
                         <div class="toolbar">
+                            <div class="toolbar_message"><div id="statusbar" class="hide_text"></div></div>
                             <div class="toolbar_button" onclick="javascript:enterFullScreenMode()" title="Enter fullscreen mode (F5)" data-toggle="tooltip">⛶</div>
                         </div>
                     </div>
@@ -239,8 +278,6 @@ The main thing you need to do is to direct the trains to the cities of appropria
 At the same time, you need to keep in mind that the train cannot be controlled, we can only stop the traffic using a traffic light or direct the train in the right direction using the switches. You can also develop your railway network - build new roads!<br>
 Build forks, earn money and don't let trains collide!</div>
 This game completely repeats the algorithms of the original game. Because of this, the controls are awkward and impossible to play on touch devices. In the future, the game will be improved and adapted for modern devices.
-<br><br>
-<b>Main menu</b>: keyboard control only - press the buttons corresponding to the first letter of the menu item to select.
 <br><br>
 There are two control modes in the game: management and construction.
 <br><br>
