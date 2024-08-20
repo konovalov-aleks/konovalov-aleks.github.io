@@ -175,8 +175,6 @@
 
         </style>
 
-        <script src="https://cdn.amplitude.com/libs/analytics-browser-2.10.0-min.js.gz"></script><script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.6.17-min.js.gz"></script><script>window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1})).promise.then(function() {window.amplitude.init('f6599d11d49153f39b1f76cd7fab0d6f', {"serverZone":"EU","autocapture":{"elementInteractions":true}});});</script>
-
     </head>
 
     <!-- Google tag (gtag.js) -->
@@ -191,6 +189,11 @@
     <script>
 
         function enterFullScreenMode() {
+            gtag('event', 'enter_fullscreen', {
+                'app_name': 'reSL',
+                'screen_name': 'Home'
+            });
+
             var canvas = document.getElementById('canvas');
 
             var downEvent = new Event('keydown', { 'bubbles': true });
@@ -227,6 +230,11 @@
         }
 
         async function run_game() {
+            gtag('event', 'run_game', {
+                'app_name': 'reSL',
+                'screen_name': 'Home'
+            });
+
             var m = await createModule();
 
             m.canvas = (() => {
