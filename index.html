@@ -45,12 +45,14 @@
                 left: 0;
                 bottom: 0;
                 display: flex;
+                padding: 5px;
                 align-items: center;
                 flex-flow: column;
                 width: 100%;
                 border-top: 1px solid #ccc;
                 color: #888;
                 background-color: #fff;
+                font-size: 0.7rem;
             }
 
             .main-area-container {
@@ -68,6 +70,9 @@
 
             .manual {
                 margin: 20px;
+                margin-top: 0;
+            }
+            .manual>h2 {
                 margin-top: 0;
             }
 
@@ -107,15 +112,15 @@
             }
 
             .game_placeholder {
-                background-image: url('shortline.png');
-                background-repeat: no-repeat;
-                background-size: contain;
-                background-position: center;
-                flex-grow: 1;
+                position: relative;
                 width: 100%;
-                aspect-ratio: 640/350;
+            }
+            .game_placeholder>img {
+                width: 100%;
             }
             .game_start_btn {
+                position: absolute;
+                top: 0;
                 background-image: url('play_button.png');
                 background-repeat: no-repeat;
                 background-size: 25%;
@@ -138,7 +143,7 @@
                 padding: 2px;
                 align-items: center;
                 justify-content: right;
-                font-size: 1em;
+                font-size: 1rem;
             }
 
             .toolbar_button {
@@ -206,21 +211,29 @@
                 'screen_name': 'Home'
             });
 
-            var canvas = document.getElementById('canvas');
+            try {
+                var canvas = document.getElementById('canvas');
 
-            var downEvent = new Event('keydown', { 'bubbles': true });
-            downEvent.key = 'F5';
-            downEvent.code = 'F5';
-            downEvent.which = 116;
-            downEvent.keyCode= 116;
-            canvas.dispatchEvent(downEvent);
+                var downEvent = new Event('keydown', { 'bubbles': true });
+                downEvent.key = 'F5';
+                downEvent.code = 'F5';
+                downEvent.which = 116;
+                downEvent.keyCode= 116;
+                canvas.dispatchEvent(downEvent);
 
-            var upEvent = new Event('keyup', { 'bubbles': true });
-            upEvent.key = 'F5';
-            upEvent.code = 'F5';
-            upEvent.which = 116;
-            upEvent.keyCode= 116;
-            canvas.dispatchEvent(upEvent);
+                var upEvent = new Event('keyup', { 'bubbles': true });
+                upEvent.key = 'F5';
+                upEvent.code = 'F5';
+                upEvent.which = 116;
+                upEvent.keyCode= 116;
+                canvas.dispatchEvent(upEvent);
+            } catch (err) {
+                gtag('event', 'exception', {
+                    'description': err,
+                    'fatal': false
+                });
+                console.error(err);
+            }
         }
 
         function hideMessage() {
@@ -247,28 +260,36 @@
                 'screen_name': 'Home'
             });
 
-            var m = await createModule();
+            try {
+                var m = await createModule();
 
-            m.canvas = (() => {
-                var e = document.getElementById("canvas");
-                return e.addEventListener("webglcontextlost",
-                    (e => {
-                        alert("WebGL context lost. You will need to reload the page."),
-                        e.preventDefault()
-                    }), !1
-                ), e
-            })();
+                m.canvas = (() => {
+                    var e = document.getElementById("canvas");
+                    return e.addEventListener("webglcontextlost",
+                        (e => {
+                            alert("WebGL context lost. You will need to reload the page."),
+                            e.preventDefault()
+                        }), !1
+                    ), e
+                })();
 
-            m.addOnExit(() => {
-                document.getElementById('game_ui').classList.add('hidden');
-                document.getElementById('placeholder').classList.remove('hidden');
-            });
+                m.addOnExit(() => {
+                    document.getElementById('game_ui').classList.add('hidden');
+                    document.getElementById('placeholder').classList.remove('hidden');
+                });
 
-            document.getElementById('game_ui').classList.remove('hidden');
-            document.getElementById('placeholder').classList.add('hidden');
-            m.callMain(['--windowed'])
+                document.getElementById('game_ui').classList.remove('hidden');
+                document.getElementById('placeholder').classList.add('hidden');
+                m.callMain(['--windowed'])
 
-            showMessage('Click mouse or press any key to skip the intro');
+                showMessage('Click mouse or press any key to skip the intro');
+            } catch (err) {
+                gtag('event', 'exception', {
+                    'description': err,
+                    'fatal': true
+                });
+                console.error(err);
+            }
         }
     </script>
 
@@ -290,6 +311,7 @@
                     </div>
                 </div>
                 <div class="game_placeholder" id="placeholder">
+                    <img src="shortline.png"/>
                     <div class="game_start_btn" onclick="javascript:run_game()"></div>
                 </div>
             </div>
