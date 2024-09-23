@@ -1,198 +1,195 @@
-<!doctypehtml>
-    <html lang=en-us>
+<!DOCTYPE html>
+<html lang=en-us>
 
-    <head>
-        <meta charset=utf-8>
-        <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>reSL - reverse engineered ShortLine 1.1 game</title>
-        <style>
-            body {
-                font-family: arial;
-                font-size: 1rem;
-                margin: 0;
-                padding: none
-            }
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>reSL - reverse engineered ShortLine 1.1 game</title>
+    <style>
+        body {
+            font-family: arial;
+            font-size: 1rem;
+            margin: 0;
+            padding: 0;
+        }
 
-            .emscripten {
-                padding-right: 0;
-                margin-left: auto;
-                margin-right: auto;
-                display: block
-            }
+        .emscripten {
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block
+        }
 
-            canvas.emscripten {
-                border: 0 none;
-                background-color: #000;
-                width: 100%;
-                aspect-ratio: 640/350;
-            }
+        canvas.emscripten {
+            border: 0 none;
+            background-color: #000;
+            width: 100%;
+            aspect-ratio: 640/350;
+        }
 
-            .header {
-                text-align: center;
-                display: flex;
-                align-content: center;
-                justify-content: center;
-                font-family: monospace;
-                width: 100%;
-                flex-flow: column;
-                align-items: center;
-                flex-wrap: wrap;
-                margin-bottom: 20px;
-            }
+        .header {
+            text-align: center;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            font-family: monospace;
+            width: 100%;
+            flex-flow: column;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
 
-            .footer {
-                left: 0;
-                bottom: 0;
-                display: flex;
-                padding: 5px;
-                align-items: center;
-                flex-flow: column;
-                width: 100%;
-                border-top: 1px solid #ccc;
-                color: #888;
-                background-color: #fff;
-                font-size: 0.7rem;
+        .footer {
+            left: 0;
+            bottom: 0;
+            display: flex;
+            padding: 5px;
+            align-items: center;
+            flex-flow: column;
+            width: 100%;
+            border-top: 1px solid #ccc;
+            color: #888;
+            background-color: #fff;
+            font-size: 0.7rem;
+        }
+
+        .main-area-container {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .screen {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .manual {
+            margin: 20px;
+            margin-top: 0;
+        }
+        .manual>h2 {
+            margin-top: 0;
+        }
+
+        @media (min-width:1025px) {
+            .screen {
+                margin: 30px;
+                margin-top: 0px;
             }
 
             .main-area-container {
-                display: flex;
-                flex-flow: column;
-                justify-content: center;
-                flex-direction: column;
-            }
-
-            .screen {
-                margin-top: 20px;
-                margin-bottom: 20px;
-                width: 100%;
+                flex-direction: row;
             }
 
             .manual {
-                margin: 20px;
-                margin-top: 0;
+                width: 30%;
+                flex-grow: 1;
             }
-            .manual>h2 {
-                margin-top: 0;
-            }
+        }
 
-            @media (min-width:1025px) {
-                .screen {
-                    margin: 30px;
-                    margin-top: 0px;
-                }
-
-                .main-area-container {
-                    flex-direction: row;
-                }
-
-                .manual {
-                    width: 30%;
-                    flex-grow: 1;
-                }
+        @media (min-height:900px) {
+            .footer {
+                position: fixed;
             }
+        }
 
-            @media (min-height:900px) {
-                .footer {
-                    position: fixed;
-                }
-            }
+        .intro {
+            font: 0.8rem "Verdana";
+            color: #303030;
+            border-left: solid 2px #cccccc;
+            margin: 5px;
+            margin-bottom: 15px;
+            padding-left: 3px;
+        }
 
-            .intro {
-                font: 0.8rem "Verdana";
-                color: #303030;
-                border-left: solid 2px #cccccc;
-                margin: 5px;
-                margin-bottom: 15px;
-                padding-left: 3px;
-            }
+        .invisible {
+            display: none;
+        }
 
-            .invisible {
-                display: none;
-            }
+        .game_placeholder {
+            position: relative;
+            width: 100%;
+        }
+        .game_placeholder>img {
+            width: 100%;
+        }
+        .game_start_btn {
+            position: absolute;
+            top: 0;
+            background-image: url('play_button.png');
+            background-repeat: no-repeat;
+            background-size: 25%;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+        }
+        .game_start_btn:hover {
+            background-image: url('play_button_hovered.png');
+        }
+        .hidden {
+            display: none;
+        }
 
-            .game_placeholder {
-                position: relative;
-                width: 100%;
-            }
-            .game_placeholder>img {
-                width: 100%;
-            }
-            .game_start_btn {
-                position: absolute;
-                top: 0;
-                background-image: url('play_button.png');
-                background-repeat: no-repeat;
-                background-size: 25%;
-                background-position: center;
-                width: 100%;
-                height: 100%;
-            }
-            .game_start_btn:hover {
-                background-image: url('play_button_hovered.png');
-            }
-            .hidden {
-                display: none;
-            }
+        .toolbar {
+            display: inline-flex;
+            background-color: #494444;
+            height: 20px;
+            width: 100%;
+            padding: 2px;
+            align-items: center;
+            justify-content: right;
+            font-size: 1rem;
+        }
 
-            .toolbar {
-                display: inline-flex;
-                background-color: #494444;
-                height: 20px;
-                width: 100%;
-                padding: 2px;
-                align-items: center;
-                justify-content: right;
-                font-size: 1rem;
-            }
+        .toolbar_button {
+            margin-right: 10px;
+            color: #c0c0c0;
+            width: 20px;
+            height: 20px;
+            cursor: default;
+            user-select: none;
+            text-align: center;
+            border-radius: 4px;
+        }
 
-            .toolbar_button {
-                margin-right: 10px;
-                color: #c0c0c0;
-                width: 20px;
-                height: 20px;
-                cursor: default;
-                user-select: none;
-                text-align: center;
-                border-radius: 4px;
-            }
+        .hide_text {
+            padding-top: 50px;
+        }
 
-            .hide_text {
-                padding-top: 50px;
-            }
+        #statusbar {
+            transition-property: padding-top;
+            transition-duration: 1s;
+            transition-timing-function: linear;
+        }
 
-            #statusbar {
-                transition-property: padding-top;
-                transition-duration: 1s;
-                transition-timing-function: linear;
-            }
+        .toolbar_message {
+            color: white;
+            flex-grow: 100;
+            font: 0.8rem "Verdana";
+            height: 15px;
+            overflow: hidden;
+        }
 
-            .toolbar_message {
-                color: white;
-                flex-grow: 100;
-                font: 0.8rem "Verdana";
-                height: 15px;
-                overflow: hidden;
-            }
+        .toolbar_button:hover {
+            color: #ffc0c0;
+            box-shadow: 1px 1px 3px black;
+            background-color: #332c2c;
+        }
 
-            .toolbar_button:hover {
-                color: #ffc0c0;
-                box-shadow: 1px 1px 3px black;
-                background-color: #332c2c;
-            }
+        #game_ui {
+            border: 1px solid black;
+            border-radius: 7px;
+            overflow: hidden;
+        }
 
-            #game_ui {
-                border: 1px solid black;
-                border-radius: 7px;
-                overflow: hidden;
-            }
+    </style>
 
-        </style>
-
-        <!-- github button -->
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-    </head>
+    <!-- github button -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5PY28DGX77"></script>
@@ -292,31 +289,33 @@
             }
         }
     </script>
+</head>
 
-    <body>
-        <div class="header">
-            <h1>reSL - remastered ShortLine v1.1 game</h1>
-            <div class="github-buttons">
-                <a class="github-button" href="https://github.com/konovalov-aleks/resl/subscription" data-size="large" aria-label="Watch konovalov-aleks/resl on GitHub">Watch</a>
-                <a class="github-button" href="https://github.com/konovalov-aleks/resl" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star konovalov-aleks/resl on GitHub">Star</a>
+
+<body>
+    <div class="header">
+        <h1>reSL - remastered ShortLine v1.1 game</h1>
+        <div class="github-buttons">
+            <a class="github-button" href="https://github.com/konovalov-aleks/resl/subscription" data-size="large" aria-label="Watch konovalov-aleks/resl on GitHub">Watch</a>
+            <a class="github-button" href="https://github.com/konovalov-aleks/resl" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star konovalov-aleks/resl on GitHub">Star</a>
+        </div>
+    </div>
+    <div class="main-area-container">
+        <div class="screen">
+            <div id="game_ui" class="hidden">
+                <canvas class="emscripten" id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas>
+                <div class="toolbar">
+                    <div class="toolbar_message"><div id="statusbar" class="hide_text"></div></div>
+                    <div class="toolbar_button" onclick="javascript:enterFullScreenMode()" title="Enter fullscreen mode (F5)" data-toggle="tooltip">⛶</div>
+                </div>
+            </div>
+            <div class="game_placeholder" id="placeholder">
+                <img src="shortline.png">
+                <div class="game_start_btn" onclick="javascript:run_game()"></div>
             </div>
         </div>
-        <div class="main-area-container">
-            <div class="screen">
-                <div id="game_ui" class="hidden">
-                    <canvas class="emscripten" id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas>
-                    <div class="toolbar">
-                        <div class="toolbar_message"><div id="statusbar" class="hide_text"></div></div>
-                        <div class="toolbar_button" onclick="javascript:enterFullScreenMode()" title="Enter fullscreen mode (F5)" data-toggle="tooltip">⛶</div>
-                    </div>
-                </div>
-                <div class="game_placeholder" id="placeholder">
-                    <img src="shortline.png"/>
-                    <div class="game_start_btn" onclick="javascript:run_game()"></div>
-                </div>
-            </div>
-            <div class="manual">
-                <h2>How to play?</h2>
+        <div class="manual">
+            <h2>How to play?</h2>
 <div class="intro">The main idea of the game ShortLine is managing a railroad in the 19-20th centuries.
 The main thing you need to do is to direct the trains to the cities of appropriate color, avoiding collisions.
 At the same time, you need to keep in mind that the train cannot be controlled, we can only stop the traffic using a traffic light or direct the train in the right direction using the switches. You can also develop your railway network - build new roads!<br>
@@ -330,16 +329,16 @@ In <b>management mode</b>, you can toggle switches or switch traffic lights usin
 In <b>construction mode</b>, you can choose a rail with the left mouse button and build it using the right mouse button.
 <br><br>
 To toggle control mode, you have to press &lt;space&gt; button or click left and right mouse buttons simultaneously.
-            </div>
         </div>
+    </div>
 
-        <div class="footer">
-            <div>reSL - the reverse engeenered ShortLine v1.1 game</div>
-            <div><a href="https://github.com/konovalov-aleks">Aleksey Konovalov</a>, 2024</div>
-        </div>
+    <div class="footer">
+        <div>reSL - the reverse engeenered ShortLine v1.1 game</div>
+        <div><a href="https://github.com/konovalov-aleks">Aleksey Konovalov</a>, 2024</div>
+    </div>
 
-        <script async src=resl.js></script>
+    <script async src=resl.js></script>
 
-    </body>
+</body>
 
-    </html>
+</html>
