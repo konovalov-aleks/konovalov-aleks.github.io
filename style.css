@@ -131,6 +131,11 @@ canvas.emscripten {
     display: flex;
     justify-content: center;
 }
+.game_placeholder>img {
+    max-width: 100%;
+    object-fit: contain;
+}
+
 .game_start_btn {
     position: absolute;
     top: 0;
