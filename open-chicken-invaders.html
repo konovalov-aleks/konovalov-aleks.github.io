@@ -5,6 +5,7 @@
     <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Open Chicken Invaders - remake of Chicken Invaders 2 game</title>
+    <link rel="stylesheet" href="load-animation.css">
     <link rel="stylesheet" href="style.css">
 
     <!-- Google tag (gtag.js) -->
@@ -67,6 +68,13 @@
             });
 
             try {
+                const run_btn = document.getElementById("game_start_btn");
+                const wait_anim = document.getElementById("wait_animation");
+                const timeout_id = setTimeout(() => {
+                    run_btn.classList.add('hidden');
+                    wait_anim.classList.remove('hidden');
+                }, 150);
+
                 var m = await createModule();
 
                 document.getElementById("canvas").module = m;
@@ -85,11 +93,13 @@
                     document.getElementById('placeholder').classList.remove('hidden');
                 });
 
+                clearTimeout(timeout_id);
                 document.getElementById('game_ui').classList.remove('hidden');
                 document.getElementById('placeholder').classList.add('hidden');
-                m.callMain(['--windowed'])
+                run_btn.classList.remove('hidden');
+                wait_anim.classList.add('hidden');
 
-                showMessage('Click mouse or press any key to skip the intro');
+                m.callMain(['--windowed'])
             } catch (err) {
                 gtag('event', 'exception', {
                     'description': err,
@@ -127,7 +137,8 @@
             </div>
             <div class="game_placeholder" id="placeholder">
                 <img src="oci/chicken-invaders.png">
-                <div class="game_start_btn" onclick="javascript:run_game()"></div>
+                <div id="game_start_btn" class="game_start_btn" onclick="javascript:run_game()"></div>
+                <div id="wait_animation" class="lds-default hidden"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
             </div>
         </div>
         <div class="manual">
