@@ -52,13 +52,22 @@
             }
         }
 
-        function hideMessage() {
+        function showMessage(msg) {
+            hideMessage();
             var msg_bar = document.getElementById("statusbar");
             msg_bar.classList.remove('hide_text');
             msg_bar.innerText = msg;
             msg_bar.timeout = setTimeout(() => {
                 hideMessage();
             }, 5000);
+        }
+
+        function hideMessage() {
+            var msg_bar = document.getElementById("statusbar");
+            if (msg_bar.timeout !== undefined)
+                clearTimeout(msg_bar.timeout);
+            msg_bar.classList.add('hide_text');
+            msg_bar.timeout = undefined;
         }
 
         async function run_game() {
