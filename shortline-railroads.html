@@ -53,14 +53,14 @@
             }
         }
 
-        function showMessage(msg) {
+        function showMessage(msg, timeout) {
             hideMessage();
             var msg_bar = document.getElementById("statusbar");
             msg_bar.classList.remove('hide_text');
             msg_bar.innerText = msg;
             msg_bar.timeout = setTimeout(() => {
                 hideMessage();
-            }, 5000);
+            }, timeout);
         }
 
         function hideMessage() {
@@ -69,6 +69,35 @@
                 clearTimeout(msg_bar.timeout);
             msg_bar.classList.add('hide_text');
             msg_bar.timeout = undefined;
+        }
+
+        function askStar() {
+            gtag('event', 'ask_star', {
+                'app_name': 'oci',
+                'screen_name': 'Home'
+            });
+
+            try {
+                showMessage('Do you like the game? Please star the GitHub repo ⭐', 30000);
+                var btn = document.getElementById('github-btn');
+                btn.classList.remove('glowing');
+                btn.classList.add('glowing');
+            } catch (err) {
+                gtag('event', 'exception', {
+                    'description': err,
+                    'fatal': false
+                });
+                console.error(err);
+            }
+        }
+
+        function scheduleStarAsking() {
+            var btn = document.getElementById('github-btn');
+            if (btn.timeout !== undefined)
+                clearTimeout(msg_bar.timeout);
+            btn.timeout = setTimeout(() => {
+                askStar();
+            }, 30000);
         }
 
         async function run_game() {
@@ -111,7 +140,8 @@
 
                 m.callMain(['--windowed'])
 
-                showMessage('Click mouse or press any key to skip the intro');
+                showMessage('Click mouse or press any key to skip the intro', 5000);
+                scheduleStarAsking();
             } catch (err) {
                 gtag('event', 'exception', {
                     'description': err,
@@ -131,7 +161,7 @@
             <div class="menu-items">
                 <a class="menu-btn menu-btn-pressed">Shortline railroad</a>
                 <a class="menu-btn" href="open-chicken-invaders.html">Chicken Invaders 2</a>
-                <a class="menu-github-btn" href="https://github.com/konovalov-aleks/reSL">
+                <a class="menu-github-btn" id="github-btn" href="https://github.com/konovalov-aleks/reSL">
                     <svg viewBox="0 0 16 16" width="16" height="16" class="octicon octicon-mark-github" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
                     <span>Source code</span>
                 </a>
@@ -155,21 +185,33 @@
         </div>
         <div class="manual">
             <h1>reSL</h1>
-            <h3>remastered ShortLine v1.1 game</h3>
-            <h2>How to play?</h2>
-<div class="intro">The main idea of the game ShortLine is managing a railroad in the 19-20th centuries.
-The main thing you need to do is to direct the trains to the cities of appropriate color, avoiding collisions.
-At the same time, you need to keep in mind that the train cannot be controlled, we can only stop the traffic using a traffic light or direct the train in the right direction using the switches. You can also develop your railway network - build new roads!<br>
-Build forks, earn money and don't let trains collide!</div>
-This game completely repeats the algorithms of the original game. Because of this, the controls are awkward and impossible to play on touch devices. In the future, the game will be improved and adapted for modern devices.
-<br><br>
-There are two control modes in the game: management and construction.
-<br><br>
-In <b>management mode</b>, you can toggle switches or switch traffic lights using the left mouse button to control the trains. You can also call a server train if you need to repair a road - just right-click (or long touch on mobile) to any city.
-<br><br>
-In <b>construction mode</b>, you can choose a rail with the left mouse button and build it using the right mouse button (short / long touch on mobile, respectively).
-<br><br>
-To toggle control mode, you have to press &lt;space&gt; button or click left and right mouse buttons simultaneously (or swipe on mobile).
+            <h2>remastered ShortLine v1.1 game</h2>
+            <div class="intro">The main idea of the game ShortLine is managing a railroad in the 19-20th centuries.
+            The main thing you need to do is to direct the trains to the cities of appropriate color, avoiding collisions.
+            At the same time, you need to keep in mind that the train cannot be controlled, we can only stop the traffic using a traffic light or direct the train in the right direction using the switches. You can also develop your railway network - build new roads!<br>
+            Build forks, earn money and don't let trains collide!</div>
+
+            <p>
+            Introducing <b>reSL</b>, a completely faithful revival of the classic DOS game, ShortLine Railroads!
+            Relive the excitement of the 90s as you build your railway empire, now adapted for touch devices while retaining classic gameplay.<br>
+            Dive into the world of reSL, enjoy the nostalgia and build your dream railroad today!
+            </p>
+
+            <h3>Controls</h3>
+            <p>
+            <b>Mouse/Keyboard Controls</b>
+
+            <p>Players can use the same controls as in the original game. Additionaly, you can use <i>&lt;space&gt;</i> to toggle construction/management modes instead of pressing both mouse buttons at the same time.</p>
+
+            <b>Touch Controls</b>
+            <p>
+            Navigate and control your rail network with intuitive touch gestures:
+            <ul>
+            <li>Use <i>vertical or horizontal swipes</i> to toggle between management and construction modes.</li>
+            <li>In the construction mode: <i>long touch</i> to build roads, and <i>short touch</i> to select the type of rails to construct.</li>
+            <li>In the management mode: Long touch on a city to call a server train; short touch to toggle traffic lights or switches.</li>
+            </ul>
+            </p>
         </div>
     </div>
 

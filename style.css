@@ -9,7 +9,7 @@ h1 {
     margin: 0;
 }
 
-h3 {
+h2 {
     margin-top: 0;
     color: #888;
     font-style: italic;
@@ -91,7 +91,10 @@ canvas.emscripten {
     margin-top: 0;
     overflow: auto;
 }
-.manual>h2 {
+.manual>ul>li {
+    margin: 0.5rem;
+}
+.manual>h3 {
     margin-top: 0;
 }
 
@@ -271,4 +274,22 @@ canvas.emscripten {
     .menu-github-btn>span {
         display: none;
     }
+}
+
+@keyframes glowing {
+  0% {
+    background-color: #a2a2a2;
+  }
+  50% {
+    background-color: #ffffe0;
+    box-shadow: 0 0 3px #2ba805;
+  }
+  100% {
+    background-color: #a2a2a2;
+  }
+}
+
+.glowing {
+    animation: glowing 1300ms 1s;
+    animation-iteration-count: 20;
 }
