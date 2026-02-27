@@ -41,10 +41,7 @@
 
             try {
                 var canvas = document.getElementById('canvas');
-                const w = canvas.width;
-                const h = canvas.height;
-                canvas.module.requestFullscreen();
-                canvas.module.setCanvasSize(w, h);
+                canvas.requestFullscreen();
             } catch (err) {
                 gtag('event', 'exception', {
                     'description': err,
